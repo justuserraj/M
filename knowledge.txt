@@ -1,0 +1,12 @@
+{
+    "questions": [
+        {
+            "keywords": ["light bulb", "invented", "who invented"],
+            "answer": "The light bulb was invented by Thomas Edison."
+        },
+        {
+            "keywords": ["largest", "ocean"],
+            "answer": "The largest ocean is the Pacific Ocean."
+        }
+    ]
+}

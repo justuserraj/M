@@ -1,0 +1,18 @@
+{
+    "facts": {
+        "what is your name": "My name is your personal assistant.",
+        "what is the capital of france": "The capital of France is Paris.",
+        "who created you": "I was created by a very dedicated programmer.",
+        "what is the largest ocean": "The largest ocean is the Pacific Ocean.",
+        "who invented the lightbulb": "The lightbulb was invented by Thomas Edison."
+    },
+    "why": {
+        "who created you": "I was created to assist users with everyday tasks.",
+        "what is the capital of france": "Paris is the capital because it is the country's center of commerce and culture.",
+        "what is the largest ocean": "The largest ocean is the Pacific Ocean because of the movement of the Earth's tectonic plates over millions of years."
+    },
+    "phrasings": {
+        "what's your name": "what is your name",
+        "who made you": "who created you"
+    }
+}

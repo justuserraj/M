@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Voice Assistant Remote Control</h2>
+
+<p>Enter a command and press Send.</p>
+
+<input type="text" id="commandInput" value="what is the time">
+<button onclick="sendCommand()">Send Command</button>
+
+<p id="status"></p>
+
+<script>
+async function sendCommand() {
+  const ipAddress = "http://10.188.72.2:5000"; // Replace with the IP from your terminal
+  const command = document.getElementById("commandInput").value;
+  const statusElement = document.getElementById("status");
+
+  statusElement.textContent = "Sending...";
+  
+  try {
+    const response = await fetch(`http://${ipAddress}:5000/command`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ command: command })
+    });
+
+    const result = await response.json();
+    statusElement.textContent = "Status: " + result.status + " - " + result.message;
+  } catch (error) {
+    statusElement.textContent = "Error: Could not connect to the server.";
+    console.error('Error:', error);
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Assistant Remote</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: #4CAF50;
+            color: white;
+            margin-top: 20px;
+        }
+        #status, #transcript {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Voice Assistant Remote Control</h2>
+    <p>Press the button and say your command.</p>
+
+    <button id="startButton">Start Listening</button>
+    <p id="status"></p>
+    <p id="transcript"></p>
+
+    <script>
+        if (!('webkitSpeechRecognition' in window)) {
+            alert("Sorry, your browser does not support the Web Speech API.");
+        } else {
+            const recognition = new webkitSpeechRecognition();
+            recognition.continuous = false; // <--- The key change: listen for a single command
+            recognition.interimResults = false;
+            recognition.lang = 'en-IN';
+            
+            const startButton = document.getElementById('startButton');
+            const statusElement = document.getElementById('status');
+            const transcriptElement = document.getElementById('transcript');
+
+            startButton.onclick = () => {
+                recognition.start();
+                startButton.textContent = "Listening...";
+                statusElement.textContent = "Waiting for your command...";
+                transcriptElement.textContent = "";
+            };
+
+            // This event is fired when speech is recognized
+            recognition.onresult = (event) => {
+                const transcript = event.results[event.results.length - 1][0].transcript;
+                transcriptElement.textContent = "You said: " + transcript;
+                sendCommand(transcript);
+            };
+
+            recognition.onend = () => {
+                startButton.textContent = "Start Listening";
+                statusElement.textContent = "Click to give another command.";
+            };
+
+            recognition.onerror = (event) => {
+                statusElement.textContent = "Error occurred: " + event.error;
+            };
+
+            async function sendCommand(command) {
+              const ipAddress = "10.188.72.2";
+              
+              try {
+                const response = await fetch(`http://${ipAddress}:5000/command`, {
+                  method: 'POST',
+                  mode: 'cors',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ command: command })
+                });
+
+                const result = await response.json();
+                statusElement.textContent = "Status: " + result.status + " - " + result.message;
+              } catch (error) {
+                statusElement.textContent = "Error: Could not connect to the server.";
+                console.error('Error:', error);
+              }
+            }
+        }
+    </script>
+
+</body>
+</html>
